@@ -2,6 +2,7 @@
 set -e
 cd "$(dirname "$0")"
 APP="NetMonitor.app"
+VERSION=$(cat VERSION)
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp assets/AppIcon.icns "$APP/Contents/Resources/"
@@ -15,6 +16,7 @@ cat > "$APP/Contents/Info.plist" <<PL
 <key>CFBundleIconFile</key><string>AppIcon</string>
 <key>CFBundleExecutable</key><string>NetMonitor</string>
 <key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleShortVersionString</key><string>$VERSION</string>
 <key>CFBundleVersion</key><string>1</string>
 <key>LSUIElement</key><true/>
 </dict></plist>
