@@ -33,7 +33,34 @@ System Settings → General → Login Items.
 
 The app is only ad-hoc signed. If you copy it to another Mac, Gatekeeper may ask you to approve it.
 
+## App icon
+
+The icon is drawn in code by `tools/make_icon.swift`; the generated files live in `assets/` and the iOS asset catalog.
+
+### Icon Composer layers
+
+`swiftc tools/make_icon.swift -o /tmp/make_icon && /tmp/make_icon ios.png mac.png assets/layers` also writes
+`assets/layers/{background,rabbit,speed_lines}.png` (1024 px). In Icon Composer, add `background.png` as the
+background and `speed_lines.png` and `rabbit.png` as foreground layers (rabbit on top). Set the speed-lines layer
+to about 60% opacity. Save the `.icon` into the Xcode project to replace the flat PNG.
+
 ## Project layout
 
 - `main.swift` — the whole app (traffic sampling, status item, menu, graph view)
+- `assets/` — app icon (`AppIcon.icns` for macOS, 1024 px PNGs)
+- `tools/make_icon.swift` — icon generator
+- `ios/` — iPhone app
 - `build.sh` — compiles and packages `NetMonitor.app`
+
+## iOS version
+
+`ios/` contains a SwiftUI iPhone app (iOS 17+) with live download/upload speed, a 60-second chart,
+a Wi-Fi vs cellular split, and session totals. iOS has no menu bar and suspends apps in the
+background, so speeds update only while the app is open (it can keep the screen awake).
+
+```sh
+brew install xcodegen
+cd ios && xcodegen generate && open NetMonitor.xcodeproj
+```
+
+Pick your team under Signing & Capabilities to run on a device.
