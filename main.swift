@@ -1,5 +1,6 @@
 import AppKit
 import Darwin
+import ServiceManagement
 
 /// Sums received/sent bytes across all active, non-loopback interfaces.
 func readTotals() -> (down: UInt64, up: UInt64) {
@@ -101,7 +102,7 @@ func padded(_ bytesPerSec: Double) -> String {
     return String(repeating: " ", count: max(0, 9 - s.count)) + s
 }
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     var last = readTotals()
     var lastTime = Date()
@@ -112,13 +113,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let sessionItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
     let graph = GraphView(frame: NSRect(x: 0, y: 0, width: 260, height: 90))
     let graphItem = NSMenuItem()
+    let loginItem = NSMenuItem(title: "Launch at Login", action: #selector(toggleLogin), keyEquivalent: "")
 
     func applicationDidFinishLaunching(_ n: Notification) {
         let menu = NSMenu()
         graphItem.view = graph
         [downItem, upItem, sessionItem, graphItem].forEach { menu.addItem($0) }
         menu.addItem(.separator())
+        loginItem.target = self
+        updateLoginItem()
+        menu.addItem(loginItem)
         menu.addItem(NSMenuItem(title: "Quit Net Monitor", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.delegate = self
         item.menu = menu
         item.button?.font = .monospacedSystemFont(ofSize: 9, weight: .medium)
         item.button?.title = "↑ 0 B/s\n↓ 0 B/s"
@@ -126,6 +132,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let t = Timer(timeInterval: 1, repeats: true) { [weak self] _ in self?.tick() }
         RunLoop.main.add(t, forMode: .common)
         timer = t
+    }
+
+    func updateLoginItem() {
+        loginItem.state = SMAppService.mainApp.status == .enabled ? .on : .off
+    }
+
+    func menuWillOpen(_ menu: NSMenu) { updateLoginItem() }
+
+    @objc func toggleLogin() {
+        do {
+            if SMAppService.mainApp.status == .enabled {
+                try SMAppService.mainApp.unregister()
+            } else {
+                try SMAppService.mainApp.register()
+            }
+        } catch {
+            NSLog("Launch at Login failed: \(error)")
+        }
+        updateLoginItem()
     }
 
     func tick() {

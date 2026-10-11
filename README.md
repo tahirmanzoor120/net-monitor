@@ -28,8 +28,8 @@ Traffic is summed across all active, non-loopback network interfaces, so a VPN o
 open NetMonitor.app
 ```
 
-To start at login, move `NetMonitor.app` to Applications and add it under
-System Settings → General → Login Items.
+To start at login, move `NetMonitor.app` to Applications, open it, and tick **Launch at Login** in its menu
+(it appears under System Settings → General → Login Items).
 
 The app is only ad-hoc signed. If you copy it to another Mac, Gatekeeper may ask you to approve it.
 
