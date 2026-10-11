@@ -16,7 +16,13 @@ A tiny macOS menu bar app that shows live network speed, similar to NetMonitor+.
 
 Traffic is summed across all active, non-loopback network interfaces, so a VPN or other virtual interface may be counted as well.
 
-## Requirements
+## Download
+
+Get the latest `NetMonitor-<version>.dmg` from the [Releases page](https://github.com/tahirmanzoor120/net-monitor/releases/latest)
+(direct link to [v1.0.0](https://github.com/tahirmanzoor120/net-monitor/releases/download/v1.0.0/NetMonitor-1.0.0.dmg)),
+open it and drag NetMonitor to Applications. The app is not notarized, so on first launch right-click it and choose **Open**.
+
+## Requirements (to build from source)
 
 - macOS
 - Xcode command line tools (`swiftc`)
