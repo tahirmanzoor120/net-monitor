@@ -73,3 +73,7 @@ cd ios && xcodegen generate && open NetMonitor.xcodeproj
 ```
 
 Pick your team under Signing & Capabilities to run on a device.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
