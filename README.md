@@ -34,6 +34,9 @@ Or build, copy to `/Applications` and launch in one step (quits a running copy f
 ./build.sh install
 ```
 
+To package a disk image for sharing (drag the app onto the Applications shortcut), run `./build.sh dmg`;
+it writes `build/NetMonitor.dmg`.
+
 To start at login, install it with `./build.sh install`, then tick **Launch at Login** in its menu
 (it appears under System Settings → General → Login Items).
 

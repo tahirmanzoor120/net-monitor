@@ -29,3 +29,14 @@ if [[ "$1" == "install" ]]; then
     open "/Applications/$APP"
     echo "Installed to /Applications/$APP"
 fi
+
+if [[ "$1" == "dmg" ]]; then
+    STAGE="build/dmg"
+    rm -rf "$STAGE" build/NetMonitor.dmg
+    mkdir -p "$STAGE"
+    cp -R "$APP" "$STAGE/"
+    ln -s /Applications "$STAGE/Applications"
+    hdiutil create -quiet -volname "Net Monitor" -srcfolder "$STAGE" -ov -format UDZO build/NetMonitor.dmg
+    rm -rf "$STAGE"
+    echo "Created build/NetMonitor.dmg"
+fi
