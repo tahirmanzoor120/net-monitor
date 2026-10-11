@@ -95,6 +95,12 @@ final class GraphView: NSView {
     }
 }
 
+/// Left-pads to a fixed width so both lines (monospaced) line up exactly.
+func padded(_ bytesPerSec: Double) -> String {
+    let s = format(bytesPerSec)
+    return String(repeating: " ", count: max(0, 9 - s.count)) + s
+}
+
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     var last = readTotals()
@@ -133,7 +139,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let down = Double(dDown) / dt, up = Double(dUp) / dt
 
         let style = NSMutableParagraphStyle()
-        style.alignment = .right
+        style.alignment = .left
         style.maximumLineHeight = 10
         style.minimumLineHeight = 10
         let attrs: [NSAttributedString.Key: Any] = [
@@ -142,7 +148,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             .baselineOffset: -2,
         ]
         item.button?.attributedTitle = NSAttributedString(
-            string: "↑ \(format(up))\n↓ \(format(down))", attributes: attrs)
+            string: "↑ \(padded(up))\n↓ \(padded(down))", attributes: attrs)
         graph.push(down: down, up: up)
         downItem.title = "Download: \(format(down))"
         upItem.title = "Upload: \(format(up))"
