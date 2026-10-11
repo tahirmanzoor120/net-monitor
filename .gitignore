@@ -1,2 +1,4 @@
 NetMonitor.app/
 .DS_Store
+build/
+ios/NetMonitor.xcodeproj/
