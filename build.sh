@@ -21,3 +21,11 @@ cat > "$APP/Contents/Info.plist" <<PL
 PL
 codesign --force --sign - "$APP" 2>/dev/null || true
 echo "Built $APP — run: open $APP"
+
+if [[ "$1" == "install" ]]; then
+    pkill -x NetMonitor 2>/dev/null && sleep 1 || true
+    rm -rf "/Applications/$APP"
+    cp -R "$APP" /Applications/
+    open "/Applications/$APP"
+    echo "Installed to /Applications/$APP"
+fi
